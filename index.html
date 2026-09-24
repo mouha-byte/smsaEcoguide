@@ -1,0 +1,1194 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>EcoGuide — Randonnée & écotourisme solidaire dans le Nord-Ouest tunisien</title>
+  <meta name="description" content="EcoGuide : l'application de randonnée du Nord-Ouest tunisien. Cartes hors ligne, SOS géolocalisé, sentiers guidés, quiz nature et annuaire de l'économie locale solidaire. Un projet d'écotourisme adapté aux changements climatiques.">
+  <meta property="og:title" content="EcoGuide — Explorez les sentiers du Nord-Ouest tunisien.">
+  <meta property="og:description" content="Cartes hors ligne, SOS géolocalisé, patrimoine naturel et économie locale solidaire du Nord-Ouest tunisien. Téléchargez EcoGuide.">
+  <meta name="theme-color" content="#07231a">
+  <link rel="icon" type="image/png" href="logo-green.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Le suffixe ?v= force le navigateur à recharger la feuille et le
+       script après une mise à jour, au lieu de resservir sa copie en
+       cache. À incrémenter à chaque modification de l'un des deux. -->
+  <link rel="stylesheet" href="style.css?v=5">
+</head>
+<body>
+
+  <!-- Sprite SVG : icônes de la barre de navigation de l'application.
+       Le logo lotus est rendu depuis logo-moss.png / logo-green.png (images). -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+
+    <!-- Icônes de la barre de navigation de l'app -->
+    <symbol id="i-home" viewBox="0 0 24 24"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1Z"/></symbol>
+    <symbol id="i-map" viewBox="0 0 24 24"><path d="m9 4-6 2v14l6-2 6 2 6-2V4l-6 2-6-2Zm0 0v14m6-12v14"/></symbol>
+    <symbol id="i-hike" viewBox="0 0 24 24"><circle cx="13" cy="4" r="2"/><path d="m11 21 1-6-3-3 1-5 3 3 3 1M9 12l-2 9M17 8l1 13"/></symbol>
+    <symbol id="i-gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-2.7 1.1V21a2 2 0 1 1-4 0v-.1A1.6 1.6 0 0 0 8.5 19a1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1A1.6 1.6 0 0 0 3 15a2 2 0 1 1 0-4 1.6 1.6 0 0 0 1.1-2.7l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1A1.6 1.6 0 0 0 9 5V4.9a2 2 0 1 1 4 0V5a1.6 1.6 0 0 0 2.7 1.1l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1A1.6 1.6 0 0 0 19.4 12H21a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1Z"/></symbol>
+  </svg>
+
+  <!-- Barre de progression de lecture -->
+  <div class="progress-bar" id="progressBar" aria-hidden="true"></div>
+
+  <!-- Voile du tiroir de navigation mobile -->
+  <div class="nav-scrim" id="navScrim" aria-hidden="true"></div>
+
+  <!-- ══════════════ NAVIGATION ══════════════ -->
+  <header class="nav" id="nav">
+    <div class="nav-inner">
+      <a href="#accueil" class="nav-logo" aria-label="EcoGuide — accueil">
+        <!-- Le lotus d'origine, posé directement sur le verre : le carré
+             vert sombre qui l'enfermait faisait doublon avec lui. -->
+        <img class="nav-logo-lotus" src="logo-mark.png" alt="" aria-hidden="true">
+        <span class="nav-logo-text">Eco<em>Guide</em></span>
+      </a>
+      <nav class="nav-links" id="navLinks" aria-label="Navigation principale">
+        <a href="#fonctionnalites">Fonctionnalités</a>
+        <a href="#apercu">L'application</a>
+        <a href="#video">Vidéo</a>
+        <a href="#parcours">Parcours</a>
+        <a href="#engagement">Engagement</a>
+        <a href="#telecharger" class="btn btn-primary btn-sm">
+          Télécharger
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12m0 0 5-5m-5 5-5-5M4 21h16"/></svg>
+        </a>
+      </nav>
+      <button class="nav-burger" id="navBurger" type="button"
+              aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="navLinks">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ══════════════ SCÈNE D'OUVERTURE ══════════════
+         Le bandeau partenaires et le hero partagent un seul fond :
+         la vidéo est posée ici, au niveau du conteneur, et court
+         donc derrière les deux. -->
+    <div class="hero-stage" id="heroStage">
+
+      <!-- Fond filmé. Tant que video/hero-montagne.mp4 est absent — ou
+           si la lecture échoue, si la personne a demandé moins
+           d'animations — le décor illustré du hero reste seul à
+           l'écran : jamais de cadre noir. -->
+      <video class="hero-video" id="heroVideo"
+             autoplay muted loop playsinline preload="auto">
+        <source src="video/hero-montagne.mp4" type="video/mp4">
+      </video>
+      <div class="hero-video-veil" aria-hidden="true"></div>
+
+    <!-- ══════════════ HERO ══════════════ -->
+    <section class="hero" id="accueil">
+      <div class="hero-sky" aria-hidden="true">
+        <div class="sun-glow"></div>
+        <div class="cloud cloud-1"></div>
+        <div class="cloud cloud-2"></div>
+        <div class="cloud cloud-3"></div>
+        <svg class="birds" viewBox="0 0 120 40" aria-hidden="true">
+          <path d="M10 20 Q15 14 20 20 Q25 14 30 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+          <path d="M45 12 Q49 7 53 12 Q57 7 61 12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+          <path d="M80 26 Q83 22 86 26 Q89 22 92 26" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+        </svg>
+      </div>
+
+      <!-- Montagnes en parallaxe -->
+      <div class="mountains" aria-hidden="true">
+        <svg class="mountain-layer" data-speed="0.35" viewBox="0 0 1440 320" preserveAspectRatio="none">
+          <path fill="#b9d8c2" d="M0 320 L0 200 L180 90 L340 190 L520 60 L720 210 L900 100 L1080 200 L1260 120 L1440 220 L1440 320 Z"/>
+        </svg>
+        <svg class="mountain-layer" data-speed="0.25" viewBox="0 0 1440 320" preserveAspectRatio="none">
+          <path fill="#7fb694" d="M0 320 L0 240 L200 130 L400 230 L560 120 L760 250 L960 140 L1140 240 L1300 170 L1440 250 L1440 320 Z"/>
+        </svg>
+        <svg class="mountain-layer" data-speed="0.15" viewBox="0 0 1440 320" preserveAspectRatio="none">
+          <path fill="#3f7d5c" d="M0 320 L0 270 L160 190 L330 270 L500 180 L690 280 L870 200 L1050 280 L1230 220 L1440 290 L1440 320 Z"/>
+        </svg>
+        <svg class="mountain-layer mountain-forest" data-speed="0.05" viewBox="0 0 1440 120" preserveAspectRatio="none">
+          <path fill="#123c2b" d="M0 120 L0 78 L20 78 L28 58 L36 78 L52 78 L62 48 L72 78 L96 78 L104 62 L112 78 L140 78 L152 40 L164 78 L190 78 L198 60 L206 78 L236 78 L248 46 L260 78 L288 78 L296 64 L304 78 L336 78 L348 44 L360 78 L392 78 L400 60 L408 78 L440 78 L452 50 L464 78 L496 78 L504 66 L512 78 L544 78 L556 42 L568 78 L600 78 L608 62 L616 78 L648 78 L660 48 L672 78 L704 78 L712 64 L720 78 L752 78 L764 44 L776 78 L808 78 L816 60 L824 78 L856 78 L868 50 L880 78 L912 78 L920 66 L928 78 L960 78 L972 42 L984 78 L1016 78 L1024 62 L1032 78 L1064 78 L1076 48 L1088 78 L1120 78 L1128 64 L1136 78 L1168 78 L1180 44 L1192 78 L1224 78 L1232 60 L1240 78 L1272 78 L1284 50 L1296 78 L1328 78 L1336 66 L1344 78 L1376 78 L1388 46 L1400 78 L1440 78 L1440 120 Z"/>
+        </svg>
+      </div>
+
+      <div class="leaves" id="leaves" aria-hidden="true"></div>
+
+      <div class="hero-inner">
+        <div class="hero-copy">
+          <span class="hero-badge anim-up" style="--d:.05s">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>
+            Sentiers protégés du Nord-Ouest tunisien
+          </span>
+          <h1 class="anim-up" style="--d:.15s">
+            Explorez la nature.<br><em>Préservez-la.</em>
+          </h1>
+          <p class="hero-lede anim-up" style="--d:.25s">
+            Projet « Promotion d'un écotourisme adapté aux changements climatiques » :
+            l'application officielle des <strong>sentiers du Nord-Ouest tunisien</strong>.
+            Cartes 100&nbsp;% hors ligne, SOS géolocalisé, patrimoine naturel et économie
+            locale solidaire.
+          </p>
+          <div class="hero-ctas anim-up" style="--d:.35s">
+            <!-- data-apk : le clic lance le téléchargement sur place.
+                 Sans JavaScript, le lien retombe sur la section dédiée. -->
+            <a href="#telecharger" class="btn btn-primary btn-lg" data-apk>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12m0 0 5-5m-5 5-5-5M4 21h16"/></svg>
+              <span data-apk-label>Installer l'application</span>
+            </a>
+            <a href="#apercu" class="btn btn-ghost btn-lg">
+              Voir l'application
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+            </a>
+          </div>
+          <div class="hero-trust anim-up" style="--d:.45s">
+            <span class="stars" aria-label="Note 4,8 sur 5">★★★★★</span>
+            <span><strong>4,8</strong>&nbsp;· Français · English · العربية</span>
+            <span class="dot-sep" aria-hidden="true"></span>
+            <span>Gratuit · Android &amp; iOS</span>
+          </div>
+
+          <!-- ══════════════ BANDEAU PARTENAIRES ══════════════
+               Sous la ligne des étoiles : la coopérative porteuse et
+               ses trois soutiens, sur une seule ligne. -->
+          <aside class="partners anim-up" style="--d:.55s" aria-label="Partenaires et soutiens du projet">
+            <div class="partners-inner">
+              <ul class="partners-row">
+                <li class="partner partner--round">
+                  <img src="logo/smsa-logo.png" alt="SMSA Trésors du Mont Blanc — produits de terroirs" loading="lazy" decoding="async">
+                </li>
+                <li class="partner partner--tall">
+                  <img src="logo/gef-logo.png" alt="Fonds pour l'environnement mondial (GEF)" loading="lazy" decoding="async">
+                </li>
+                <li class="partner partner--wide">
+                  <img src="logo/sgp-logo.png" alt="The GEF Small Grants Programme" loading="lazy" decoding="async">
+                </li>
+                <!-- Le PNUD est le seul construit à l'envers des autres :
+                     emblème blanc évidé dans un pavé bleu. Un filtre CSS
+                     le réduirait à un rectangle blanc plein, d'où deux
+                     fichiers — la version couleur pour le décor dessiné,
+                     la version réservée pour le fond filmé. -->
+                <li class="partner partner--narrow">
+                  <img class="partner-colour" src="logo/undp-logo.png" alt="Programme des Nations unies pour le développement (PNUD)" loading="lazy" decoding="async">
+                  <img class="partner-reversed" src="logo/undp-logo-white.png" alt="" aria-hidden="true" loading="lazy" decoding="async">
+                </li>
+              </ul>
+            </div>
+          </aside>
+        </div>
+
+        <!-- Mockup : écran d'accueil réel de l'application -->
+        <div class="hero-phone anim-up" style="--d:.3s">
+          <div class="phone phone-float" id="heroPhone">
+            <div class="phone-screen">
+              <div class="phone-island"></div>
+              <img class="phone-shot" src="images/accueil.jpg" alt="Écran d'accueil d'EcoGuide : carte de Tabarka, actions rapides et sentiers à proximité" loading="eager" fetchpriority="high" decoding="async">
+                <div class="scr scr-accueil">
+
+                <div class="scr-topbar">
+                  <span class="scr-brand">
+                    <img class="scr-lotus" src="logo-green.png" alt="" aria-hidden="true">
+                    EcoGuide
+                  </span>
+                  <span class="scr-ava"></span>
+                </div>
+
+                <div class="scr-bigmap">
+                  <svg viewBox="0 0 260 200" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+                    <rect width="260" height="200" fill="#a5d8ea"/>
+                    <path d="M-5 62 C40 52 80 66 118 60 C160 53 200 70 265 58 L265 205 L-5 205 Z" fill="#e8efdf"/>
+                    <path d="M-5 96 C30 88 70 100 110 94 C150 88 200 104 265 92 L265 205 L-5 205 Z" fill="#cfe6c8"/>
+                    <path d="M-5 150 C50 142 120 156 265 144 L265 205 L-5 205 Z" fill="#e6ddc4"/>
+                    <path d="M20 205 L46 96 L74 62" fill="none" stroke="#b9c3cf" stroke-width="5"/>
+                    <path d="M-5 118 L120 108 L182 78 L265 74" fill="none" stroke="#b9c3cf" stroke-width="5"/>
+                    <path d="M132 205 L136 120 L118 62" fill="none" stroke="#cbd3dd" stroke-width="4"/>
+                    <path d="M150 205 C158 160 176 130 214 118" fill="none" stroke="#8fc6e0" stroke-width="3"/>
+                  </svg>
+                  <span class="scr-pin scr-pin--fir" title="The Needles of Tabarka">🌲</span>
+                  <span class="scr-here"></span>
+                  <span class="scr-mapmode">◳ Standard</span>
+                  <span class="scr-mapbtns"><i>▤</i><i class="is-on">◎</i></span>
+                </div>
+
+                <span class="scr-grab"></span>
+
+                <div class="scr-quick">
+                  <span><i>🏪</i>Annuaire</span>
+                  <span><i>🗺️</i>Hors ligne</span>
+                  <span><i>🍃</i>Quiz</span>
+                  <span><i>❔</i>Aide</span>
+                </div>
+
+                <div class="scr-weather">
+                  <span class="scr-w-now">☀️ <b>14°</b></span>
+                  <span class="scr-w-txt"><b>Tabarka</b><small>Ensoleillé · vent 12 km/h</small></span>
+                  <span class="scr-w-days"><i>🌤 16°</i><i>🌦 13°</i></span>
+                </div>
+
+                <div class="scr-rowhead">
+                  <b>Sentiers à proximité</b>
+                  <span class="scr-bot" title="Assistant EcoGuide">🤖</span>
+                </div>
+
+                <div class="scr-tcards">
+                  <span class="scr-tcard">
+                    <i class="scr-tphoto"><em>★ 4.8</em></i>
+                    <b>sentier9</b><small>5,7 km · Modéré</small>
+                  </span>
+                  <span class="scr-tcard">
+                    <i class="scr-tphoto scr-tphoto--2"><em>★ 4.6</em></i>
+                    <b>sentier6</b><small>4,1 km · Facile</small>
+                  </span>
+                </div>
+
+                <div class="scr-rowhead"><b>Découverte nature</b></div>
+                <div class="scr-tip">
+                  <span class="scr-tip-ico">🦌</span>
+                  <span><b>Le saviez-vous&nbsp;?</b>Le Cerf de Barbarie est le seul cervidé d'Afrique. Il vit dans les forêts de Chêne Zéen.</span>
+                </div>
+
+                <div class="scr-bnav">
+                  <span class="is-on"><svg viewBox="0 0 24 24"><use href="#i-home"/></svg>Accueil</span>
+                  <span><svg viewBox="0 0 24 24"><use href="#i-map"/></svg>Carte</span>
+                  <b class="scr-sosbtn">SOS</b>
+                  <span><svg viewBox="0 0 24 24"><use href="#i-hike"/></svg>Sentiers</span>
+                  <span><svg viewBox="0 0 24 24"><use href="#i-gear"/></svg>Réglages</span>
+                </div>
+
+              </div>
+            </div>
+          </div>
+          <div class="hero-phone-glow" aria-hidden="true"></div>
+        </div>
+      </div>
+
+      <a class="hero-scrollcue" href="#fonctionnalites" aria-label="Faire défiler">
+        <span></span>
+      </a>
+    </section>
+
+    </div><!-- /.hero-stage -->
+
+    <!-- ══════════════ BANDEAU DÉFILANT ══════════════ -->
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee-track">
+        <span>Cartes 100 % hors ligne</span><i>*</i>
+        <span>SOS géolocalisé</span><i>*</i>
+        <span>Sentiers par QR code</span><i>*</i>
+        <span>Patrimoine naturel</span><i>*</i>
+        <span>Quiz Flore &amp; Faune</span><i>*</i>
+        <span>Annuaire local durable</span><i>*</i>
+        <span>FR · EN · العربية</span><i>*</i>
+        <span>Cartes 100 % hors ligne</span><i>*</i>
+        <span>SOS géolocalisé</span><i>*</i>
+        <span>Sentiers par QR code</span><i>*</i>
+        <span>Patrimoine naturel</span><i>*</i>
+        <span>Quiz Flore &amp; Faune</span><i>*</i>
+        <span>Annuaire local durable</span><i>*</i>
+        <span>FR · EN · العربية</span><i>*</i>
+      </div>
+    </div>
+
+    <!-- ══════════════ FONCTIONNALITÉS ══════════════ -->
+    <section class="section features" id="fonctionnalites">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="eyebrow">Fonctionnalités</span>
+          <h2>Tout ce qu'il faut pour randonner <em>autrement</em></h2>
+          <p>Conçue pour les sentiers et la biodiversité du Nord-Ouest tunisien, EcoGuide réunit sécurité, pédagogie et économie locale solidaire dans une seule application.</p>
+        </div>
+
+        <div class="features-grid">
+          <article class="feature-card reveal" style="--d:.0s">
+            <span class="feature-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5-6 2v12l6-2 6 2 6-2V5l-6 2-6-2Zm0 0v12m6-10v12"/></svg>
+            </span>
+            <h3>Cartes 100&nbsp;% hors ligne</h3>
+            <p>Téléchargez la cartographie, les sentiers, les POI et les services d'une région. Quatre niveaux de détail — <strong>Eco, Standard, Détaillé, Max</strong> — pour ajuster précision et espace de stockage.</p>
+          </article>
+
+          <article class="feature-card feature-card--sos reveal" style="--d:.08s">
+            <span class="feature-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="2.6"/><path d="M16.2 7.8a6 6 0 0 1 0 8.4M7.8 16.2a6 6 0 0 1 0-8.4M19 5a10 10 0 0 1 0 14M5 19A10 10 0 0 1 5 5"/></svg>
+            </span>
+            <h3>Alerte SOS géolocalisée</h3>
+            <p>Un appui maintenu 3 secondes transmet votre position exacte, votre altitude et la précision GPS — avec un message libre et vos contacts d'urgence à portée de pouce.</p>
+          </article>
+
+          <article class="feature-card feature-card--qr reveal" style="--d:.16s">
+            <span class="feature-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3h-3zM20 14v3M14 20h3M20 20h1"/></svg>
+            </span>
+            <h3>Sentiers ouverts par QR code</h3>
+            <p>Certains itinéraires sensibles restent verrouillés et ne s'ouvrent qu'en scannant le QR code remis par un guide agréé — un accès encadré qui protège les zones fragiles.</p>
+          </article>
+
+          <article class="feature-card reveal" style="--d:.0s">
+            <span class="feature-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-5.6-7-11a7 7 0 0 1 14 0c0 5.4-7 11-7 11Z"/><path d="m12 7 .9 1.9 2.1.3-1.5 1.4.4 2.1-1.9-1-1.9 1 .4-2.1-1.5-1.4 2.1-.3L12 7Z"/></svg>
+            </span>
+            <h3>Patrimoine local &amp; POI</h3>
+            <p>Points de vue, flore, faune et patrimoine géolocalisés, avec photo, vidéo, coordonnées et itinéraire. Du Cerf de Barbarie aux forêts humides de Chêne Zéen.</p>
+          </article>
+
+          <article class="feature-card reveal" style="--d:.08s">
+            <span class="feature-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 2 8l10 5 10-5-10-5Z"/><path d="M6 10.5V15c0 1.5 2.7 3 6 3s6-1.5 6-3v-4.5"/><path d="M22 8v6"/></svg>
+            </span>
+            <h3>Quiz nature gamifiés</h3>
+            <p>Des quiz par catégorie — Flore, Faune, patrimoine — avec score total, taux de réussite et progression. Apprendre l'écosystème en marchant.</p>
+          </article>
+
+          <article class="feature-card reveal" style="--d:.16s">
+            <span class="feature-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5 12 4l9 5.5"/><path d="M5 11v8h14v-8"/><path d="M9 19v-5h6v5"/></svg>
+            </span>
+            <h3>Économie locale solidaire</h3>
+            <p>Un annuaire des artisans, produits locaux et guides de la SMSA, avec distance et contact — pour que la randonnée profite directement au territoire.</p>
+          </article>
+        </div>
+
+        <!-- Fonctionnalités secondaires -->
+        <div class="features-extra">
+          <div class="fx reveal" style="--d:.0s">
+            <span class="fx-ico">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3.5 9h17M3.5 15h17M12 3a15 15 0 0 1 0 18A15 15 0 0 1 12 3Z"/></svg>
+            </span>
+            <div><strong>Trilingue</strong><span>Français, English et العربية, avec bascule instantanée.</span></div>
+          </div>
+          <div class="fx reveal" style="--d:.06s">
+            <span class="fx-ico">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4V5Z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg>
+            </span>
+            <div><strong>Lecture vocale</strong><span>POI, instructions et assistant lus à voix haute, deux voix au choix.</span></div>
+          </div>
+          <div class="fx reveal" style="--d:.12s">
+            <span class="fx-ico">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5Z"/></svg>
+            </span>
+            <div><strong>Mode sombre</strong><span>Thème sombre intégral, économe en batterie et confortable de nuit.</span></div>
+          </div>
+          <div class="fx reveal" style="--d:.18s">
+            <span class="fx-ico">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="8" width="16" height="12" rx="3"/><path d="M12 4.5V8M9.5 13h.01M14.5 13h.01M9.5 16.5h5"/><circle cx="12" cy="3.5" r="1.2"/></svg>
+            </span>
+            <div><strong>Assistant EcoBot</strong><span>Un compagnon qui répond à vos questions sur le sentier et la nature.</span></div>
+          </div>
+          <div class="fx reveal" style="--d:.24s">
+            <span class="fx-ico">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11A8 8 0 0 0 6.3 6.3L4 8.5"/><path d="M4 4.5v4h4"/><path d="M4 13a8 8 0 0 0 13.7 4.7L20 15.5"/><path d="M20 19.5v-4h-4"/></svg>
+            </span>
+            <div><strong>Contenus synchronisés</strong><span>Sentiers, POI et contenus mis à jour automatiquement par la SMSA.</span></div>
+          </div>
+          <div class="fx reveal" style="--d:.30s">
+            <span class="fx-ico">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 8.5a15 15 0 0 1 20 0"/><path d="M5 12a10.5 10.5 0 0 1 14 0"/><path d="M8.5 15.5a5.5 5.5 0 0 1 7 0"/><circle cx="12" cy="19" r="1"/><path d="m3 3 18 18"/></svg>
+            </span>
+            <div><strong>Zéro connexion requise</strong><span>Tout fonctionne au cœur du parc, là où le réseau ne passe pas.</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════ APERÇU DE L'APP ══════════════ -->
+    <section class="section screens" id="apercu">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="eyebrow">L'application</span>
+          <h2>Douze écrans, une seule <em>promesse</em></h2>
+          <p>Une interface lisible en plein soleil, utilisable avec des gants, et qui reste claire jusque dans les situations d'urgence.</p>
+        </div>
+
+        <div class="screens-grid">
+
+          <figure class="screen-item reveal" style="--d:0.00s">
+            <div class="phone phone--sm">
+              <div class="phone-screen">
+                <div class="phone-island"></div>
+                <img class="phone-shot" src="images/sentier-detail.jpg" alt="Fiche d'un sentier : photo, distance, durée, dénivelé et profil d'altitude" loading="lazy" decoding="async">
+                <div class="scr scr-trail">
+                  <div class="scr-hero-photo">
+                    <span class="scr-round">←</span>
+                    <span class="scr-round scr-round--r2">⬇</span>
+                    <span class="scr-round scr-round--r1">♡</span>
+                    <span class="scr-diff">MODÉRÉ</span>
+                    <strong>sentier9</strong>
+                    <small>📍 Parc National · ★ 4.8</small>
+                  </div>
+                  <div class="scr-stats3">
+                    <span><i>🥾</i><small>Distance</small><b>5,7 km</b></span>
+                    <span><i>🕐</i><small>Durée</small><b>2 h 40</b></span>
+                    <span><i>⛰️</i><small>Dénivelé</small><b>+450 m</b></span>
+                  </div>
+                  <div class="scr-h3">Carte du sentier</div>
+                  <div class="scr-tmap">
+                    <svg viewBox="0 0 220 84" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+                      <rect width="220" height="84" fill="#bfe6c9"/>
+                      <path d="M40 -10 L58 34 L44 94" fill="none" stroke="#d8d2e4" stroke-width="3"/>
+                      <path d="M-10 60 L70 52 L150 66 L230 58" fill="none" stroke="#d8d2e4" stroke-width="3"/>
+                      <path d="M74 26 C112 16 150 30 156 46 C162 64 132 78 104 74 C78 70 66 52 74 26 Z" fill="none" stroke="#fff" stroke-width="7" stroke-linejoin="round"/>
+                      <path d="M74 26 C112 16 150 30 156 46 C162 64 132 78 104 74 C78 70 66 52 74 26 Z" fill="none" stroke="#f5a623" stroke-width="4" stroke-linejoin="round"/>
+                    </svg>
+                    <span class="scr-tmap-start">🏁</span>
+                    <span class="scr-tmap-ctrl"><i>+</i><i>−</i></span>
+                  </div>
+                  <div class="scr-h3">Profil d'altitude <em>Max&nbsp;: 140 m</em></div>
+                  <div class="scr-elev">
+                    <svg viewBox="0 0 200 60" preserveAspectRatio="none" aria-hidden="true">
+                      <path d="M0 52 L12 46 L22 44 L30 26 L44 24 L52 30 L62 28 L74 14 L88 18 L96 16 L104 20 L112 12 L120 18 L128 14 L134 46 L150 50 L162 49 L170 42 L178 47 L186 38 L200 44 L200 60 L0 60 Z" fill="url(#eg)"/>
+                      <path d="M0 52 L12 46 L22 44 L30 26 L44 24 L52 30 L62 28 L74 14 L88 18 L96 16 L104 20 L112 12 L120 18 L128 14 L134 46 L150 50 L162 49 L170 42 L178 47 L186 38 L200 44" fill="none" stroke="#128a3c" stroke-width="2.2"/>
+                      <defs><linearGradient id="eg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#128a3c" stop-opacity=".35"/><stop offset="1" stop-color="#128a3c" stop-opacity="0"/></linearGradient></defs>
+                    </svg>
+                    <span class="scr-elev-x"><i>Départ</i><i>2,9 km</i><i>Arrivée</i></span>
+                  </div>
+                  <div class="scr-h3">Points d'intérêt <em>3 lieux</em></div>
+                  <div class="scr-poirow">
+                    <span><i class="scr-poith"></i>Cascade</span>
+                    <span><i class="scr-poith scr-poith--2"></i>Chêne Zéen</span>
+                    <span><i class="scr-poith scr-poith--3"></i>Belvédère</span>
+                  </div>
+                  <div class="scr-lockbar">
+                    <span class="scr-lockbtn">🔒 Verrouillé — scanner le QR</span>
+                    <span class="scr-sosfab">SOS</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <figcaption>
+              <strong>Détail du sentier</strong>
+              <span>Photo, statistiques, profil d'altitude et carte du tracé</span>
+            </figcaption>
+          </figure>
+
+          <figure class="screen-item reveal" style="--d:0.08s">
+            <div class="phone phone--sm">
+              <div class="phone-screen">
+                <div class="phone-island"></div>
+                <img class="phone-shot" src="images/patrimoine.jpg" alt="Liste des points d'intérêt du patrimoine local" loading="lazy" decoding="async">
+                <div class="scr scr-ph"><img class="scr-ph-logo" src="logo-green.png" alt="" aria-hidden="true"></div>
+              </div>
+            </div>
+            <figcaption>
+              <strong>Patrimoine local</strong>
+              <span>Points de vue, flore, faune et patrimoine à explorer</span>
+            </figcaption>
+          </figure>
+
+          <figure class="screen-item reveal" style="--d:0.16s">
+            <div class="phone phone--sm">
+              <div class="phone-screen">
+                <div class="phone-island"></div>
+                <img class="phone-shot" src="images/sentier-verrouille.jpg" alt="Sentier verrouillé : fenêtre invitant à scanner le QR code d'un guide" loading="lazy" decoding="async">
+                <div class="scr scr-locked">
+                  <div class="scr-dim">
+                    <div class="scr-lockhead">
+                      <span>←</span><b>sentier9</b><i>⬇ ♡</i>
+                    </div>
+                    <div class="scr-tmap scr-tmap--lock">
+                      <svg viewBox="0 0 220 60" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+                        <rect width="220" height="60" fill="#bfe6c9"/>
+                        <path d="M96 -20 C130 -12 152 6 150 24 C148 42 120 54 96 50" fill="none" stroke="#f5a623" stroke-width="4"/>
+                      </svg>
+                    </div>
+                    <div class="scr-h3">Profil d'altitude <em>Max&nbsp;: 140 m</em></div>
+                    <div class="scr-elev">
+                      <svg viewBox="0 0 200 60" preserveAspectRatio="none" aria-hidden="true">
+                        <path d="M0 52 L12 46 L22 44 L30 26 L44 24 L52 30 L62 28 L74 14 L88 18 L96 16 L104 20 L112 12 L120 18 L128 14 L134 46 L150 50 L162 49 L170 42 L178 47 L186 38 L200 44" fill="none" stroke="#128a3c" stroke-width="2.2"/>
+                      </svg>
+                      <span class="scr-elev-x"><i>Départ</i><i>2,9 km</i><i>Arrivée</i></span>
+                    </div>
+                    <div class="scr-h3">Points d'intérêt <em>0 lieu</em></div>
+                    <p class="scr-poi-txt">Aucun point d'intérêt</p>
+                    <div class="scr-h3">Avis de la communauté <em>Voir tout</em></div>
+                    <span class="scr-cmt">✎ Commenter</span>
+                    <p class="scr-poi-txt">Aucun avis pour le moment. Soyez le premier&nbsp;!</p>
+                    <div class="scr-lockbar scr-lockbar--static">
+                      <span class="scr-lockbtn">🔒 Verrouillé — scanner le QR</span>
+                      <span class="scr-sosfab">SOS</span>
+                    </div>
+                  </div>
+                  <div class="scr-modal">
+                    <span class="scr-lockico">🔒</span>
+                    <strong>Sentier verrouillé</strong>
+                    <p>Ce sentier doit être ouvert par un guide. Scannez le QR code fourni, ou contactez l'administrateur.</p>
+                    <span class="scr-errcode">Code d'erreur : ERR-TRAIL-403</span>
+                    <span class="scr-modal-actions">
+                      <i>Fermer</i>
+                      <b>⛶ Scanner le QR</b>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <figcaption>
+              <strong>Accès encadré par QR</strong>
+              <span>Les sentiers sensibles ne s'ouvrent qu'avec un guide agréé</span>
+            </figcaption>
+          </figure>
+
+          <figure class="screen-item reveal" style="--d:0.24s">
+            <div class="phone phone--sm">
+              <div class="phone-screen">
+                <div class="phone-island"></div>
+                <img class="phone-shot" src="images/quiz.jpg" alt="Écran Quiz : score total et catégories Flore et Faune" loading="lazy" decoding="async">
+                <div class="scr scr-dark scr-quiz">
+                  <div class="scr-dhead"><span class="scr-dico">❓</span><b>Quiz</b><i class="scr-ava scr-ava--sm"></i></div>
+                  <div class="scr-quizscore">
+                    <span class="scr-trophy">🏆</span>
+                    <span class="scr-qs-main"><small>Score Total</small><b>1 240 pts</b></span>
+                    <span class="scr-qs-row"><i><b>18</b>Joués</i><i><b>82 %</b>Moyenne</i><i><b>147</b>Bonnes</i></span>
+                  </div>
+                  <div class="scr-qrandom"><span class="scr-play">▶</span><span><b>Quiz Aléatoire</b><small>10 questions · Toutes catégories</small></span><i>→</i></div>
+                  <div class="scr-h3 scr-h3--d">Choisir une catégorie</div>
+                  <div class="scr-qcats">
+                    <span><i class="scr-qc scr-qc--flore">🌿</i><b>Flore</b><small>La végétation</small></span>
+                    <span><i class="scr-qc scr-qc--faune">🦊</i><b>Faune</b><small>Les animaux</small></span>
+                    <span><i class="scr-qc scr-qc--patri">🏛️</i><b>Patrimoine</b><small>Histoire des lieux</small></span>
+                    <span><i class="scr-qc scr-qc--eco">♻️</i><b>Écologie</b><small>Gestes durables</small></span>
+                  </div>
+                  <div class="scr-bnav scr-bnav--d">
+                    <span class="is-on"><svg viewBox="0 0 24 24"><use href="#i-home"/></svg>Accueil</span>
+                    <span><svg viewBox="0 0 24 24"><use href="#i-map"/></svg>Carte</span>
+                    <b class="scr-sosbtn">SOS</b>
+                    <span><svg viewBox="0 0 24 24"><use href="#i-hike"/></svg>Sentiers</span>
+                    <span><svg viewBox="0 0 24 24"><use href="#i-gear"/></svg>Réglages</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <figcaption>
+              <strong>Quiz &amp; progression</strong>
+              <span>Score, taux de réussite et catégories thématiques</span>
+            </figcaption>
+          </figure>
+
+          <figure class="screen-item reveal" style="--d:0.00s">
+            <div class="phone phone--sm">
+              <div class="phone-screen">
+                <div class="phone-island"></div>
+                <img class="phone-shot" src="images/sos.jpg" alt="Écran d'urgence SOS avec position GPS et contacts de secours" loading="lazy" decoding="async">
+                <div class="scr scr-sos">
+                  <div class="scr-sos-head"><i>✕</i>Urgence SOS</div>
+                  <div class="scr-sos-btnwrap">
+                    <span class="scr-sos-ring"></span>
+                    <span class="scr-sos-ring scr-sos-ring--2"></span>
+                    <span class="scr-sos-btn">SOS</span>
+                  </div>
+                  <div class="scr-sos-hint"><b>Maintenez 3 secondes pour alerter</b><span>Les secours recevront votre position exacte</span></div>
+                  <div class="scr-sos-msg">
+                    <span class="scr-sos-msglabel">💬 Message (optionnel)</span>
+                    <span class="scr-sos-field">Décrivez votre situation (blessure, danger…)</span>
+                    <small>0/250</small>
+                  </div>
+                  <div class="scr-sos-pos">
+                    <span class="scr-sos-poshead"><b>Votre Position</b><i class="scr-weak">◎ Signal Faible</i></span>
+                    <span class="scr-sos-coord">36.949469° N · 8.760675° E</span>
+                    <span class="scr-sos-alt"><i>Altitude<b>48 m</b></i><i>Précision<b>± 40 m</b></i></span>
+                  </div>
+                  <div class="scr-h3">Contacts d'urgence</div>
+                  <div class="scr-contact">
+                    <span class="scr-ct-ico">✚</span>
+                    <span><b>Protection Civile</b><small>Secours &amp; incendie</small><em>198</em></span>
+                    <span class="scr-ct-call">📞</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <figcaption>
+              <strong>Urgence SOS</strong>
+              <span>Position, altitude, précision GPS et contacts de secours</span>
+            </figcaption>
+          </figure>
+
+          <figure class="screen-item reveal" style="--d:0.08s">
+            <div class="phone phone--sm">
+              <div class="phone-screen">
+                <div class="phone-island"></div>
+                <img class="phone-shot" src="images/cartes-hors-ligne.jpg" alt="Cartes hors ligne : niveaux de détail et téléchargement de la carte de Tabarka" loading="lazy" decoding="async">
+                <div class="scr scr-dark scr-offline">
+                  <div class="scr-dhead"><b>Cartes hors ligne</b><i class="scr-ava scr-ava--sm"></i></div>
+                  <div class="scr-prep">
+                    <span class="scr-prep-top"><i>☁️</i><b>Préparez votre randonnée</b><em>Standard</em></span>
+                    <p>Téléchargez cartographie, sentiers, POI et services pour les consulter sans connexion.</p>
+                    <span class="scr-prep-nums"><i><b>0 Mo</b>Carte</i><i><b>0</b>Éléments</i><i><b>69 Mo</b>À prévoir</i></span>
+                  </div>
+                  <div class="scr-offcard">
+                    <span class="scr-off-top"><i>🗺️</i><span><b>Carte Tabarka</b><small>Littoral du Nord-Ouest</small></span></span>
+                    <span class="scr-off-lbl">Niveau de détail</span>
+                    <span class="scr-off-lvls"><i>Eco</i><i class="is-on">✓ Standard</i><i>Détaillé</i><i>Max</i></span>
+                    <span class="scr-off-dl">⬇ Télécharger la carte (69 Mo)</span>
+                  </div>
+                  <div class="scr-offcard scr-offcard--done">
+                    <span class="scr-off-top">
+                      <i>🗺️</i>
+                      <span><b>Littoral nord</b><small>Zone côtière · 42 Mo</small></span>
+                      <em class="scr-off-ok">✓ Prête</em>
+                    </span>
+                    <span class="scr-off-bar"><u style="width:100%"></u></span>
+                  </div>
+                  <div class="scr-bnav scr-bnav--d">
+                    <span class="is-on"><svg viewBox="0 0 24 24"><use href="#i-home"/></svg>Accueil</span>
+                    <span><svg viewBox="0 0 24 24"><use href="#i-map"/></svg>Carte</span>
+                    <b class="scr-sosbtn">SOS</b>
+                    <span><svg viewBox="0 0 24 24"><use href="#i-hike"/></svg>Sentiers</span>
+                    <span><svg viewBox="0 0 24 24"><use href="#i-gear"/></svg>Réglages</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <figcaption>
+              <strong>Cartes hors ligne</strong>
+              <span>Quatre niveaux de détail, du plus léger au plus précis</span>
+            </figcaption>
+          </figure>
+
+          <figure class="screen-item reveal" style="--d:0.16s">
+            <div class="phone phone--sm">
+              <div class="phone-screen">
+                <div class="phone-island"></div>
+                <img class="phone-shot" src="images/poi-cerf.jpg" alt="Fiche du point d'intérêt « Le Cerf de Barbarie »" loading="lazy" decoding="async">
+                <div class="scr scr-poi">
+                  <div class="scr-poi-photo">
+                    <span class="scr-round">←</span>
+                    <span class="scr-round scr-round--mute">🔇</span>
+                    <span class="scr-poi-tag">POINT DE VUE</span>
+                    <strong>«&nbsp;Le Cerf de Barbarie&nbsp;»</strong>
+                  </div>
+                  <div class="scr-poi-meta">
+                    <span><i>📷</i><small>Type</small><b>Point de vue</b></span>
+                    <span><i>📍</i><small>Coordonnées</small><b>37.1234, 9.5678</b></span>
+                  </div>
+                  <div class="scr-h3">À propos du point</div>
+                  <p class="scr-poi-txt">Seul représentant de la famille des cervidés en Afrique (<i>Cervus elaphus barbarus</i>), ce «&nbsp;fantôme de la forêt&nbsp;» a trouvé son dernier refuge au cœur des forêts humides de Chêne Zéen…</p>
+                  <div class="scr-h3">Localisation</div>
+                  <div class="scr-tmap scr-tmap--poi">
+                    <svg viewBox="0 0 220 74" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+                      <rect width="220" height="74" fill="#a5d8ea"/>
+                      <path d="M-5 24 C40 14 90 30 140 22 C175 16 200 26 225 20 L225 80 L-5 80 Z" fill="#cfe6c8"/>
+                      <path d="M-5 52 C50 44 120 58 225 46 L225 80 L-5 80 Z" fill="#e6ddc4"/>
+                      <path d="M60 80 L74 40 L96 24" fill="none" stroke="#cbd3dd" stroke-width="3"/>
+                    </svg>
+                    <span class="scr-poi-mk">📍</span>
+                  </div>
+                  <span class="scr-poi-dist">Distance depuis votre position&nbsp;: 74,00 km</span>
+                  <span class="scr-poi-cta">⇅ Directions sur la carte</span>
+                </div>
+              </div>
+            </div>
+            <figcaption>
+              <strong>Patrimoine naturel</strong>
+              <span>Fiches illustrées, lecture vocale et itinéraire direct</span>
+            </figcaption>
+          </figure>
+
+          <figure class="screen-item reveal" style="--d:0.24s">
+            <div class="phone phone--sm">
+              <div class="phone-screen">
+                <div class="phone-island"></div>
+                <img class="phone-shot" src="images/annuaire.jpg" alt="Annuaire local des établissements éco-responsables" loading="lazy" decoding="async">
+                <div class="scr scr-dark scr-dir">
+                  <div class="scr-dhead scr-dhead--col"><span><b>Annuaire Local</b><small>Soutenez l'économie durable</small></span><i class="scr-ava scr-ava--sm"></i></div>
+                  <span class="scr-search">🔍 Rechercher un établissement…</span>
+                  <span class="scr-chips"><i class="is-on">▦ Tous</i><i>🛏 Hébergements</i><i>🛠 Artisans</i></span>
+                  <div class="scr-h3 scr-h3--d">Établissements éco-responsables</div>
+                  <div class="scr-dircard">
+                    <i class="scr-dirphoto"></i>
+                    <b>Coopérative SMSA</b>
+                    <small>Produits locaux &amp; artisanat du parc</small>
+                    <em>📍 2 km d'ici · 🛠 Artisan</em>
+                  </div>
+                  <div class="scr-dircard scr-dircard--row">
+                    <i class="scr-dirphoto scr-dirphoto--2"></i>
+                    <span><b>Écolodge partenaire</b><small>Hébergement · Nefza</small><em>📍 6 km d'ici · 🛏 Hébergement</em></span>
+                  </div>
+                  <div class="scr-partner"><b>Devenir Partenaire</b><small>Artisan ou guide local ? Rejoignez le réseau.</small></div>
+                  <div class="scr-bnav scr-bnav--d">
+                    <span class="is-on"><svg viewBox="0 0 24 24"><use href="#i-home"/></svg>Accueil</span>
+                    <span><svg viewBox="0 0 24 24"><use href="#i-map"/></svg>Carte</span>
+                    <b class="scr-sosbtn">SOS</b>
+                    <span><svg viewBox="0 0 24 24"><use href="#i-hike"/></svg>Sentiers</span>
+                    <span><svg viewBox="0 0 24 24"><use href="#i-gear"/></svg>Réglages</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <figcaption>
+              <strong>Annuaire local</strong>
+              <span>Hébergements, artisans et guides éco-responsables</span>
+            </figcaption>
+          </figure>
+
+          <figure class="screen-item reveal" style="--d:0.00s">
+            <div class="phone phone--sm">
+              <div class="phone-screen">
+                <div class="phone-island"></div>
+                <img class="phone-shot" src="images/sentier-carte.jpg" alt="Carte du sentier avec le tracé et le profil d'altitude" loading="lazy" decoding="async">
+                <div class="scr scr-ph"><img class="scr-ph-logo" src="logo-green.png" alt="" aria-hidden="true"></div>
+              </div>
+            </div>
+            <figcaption>
+              <strong>Tracé &amp; profil d'altitude</strong>
+              <span>Carte du parcours, dénivelé et points d'intérêt</span>
+            </figcaption>
+          </figure>
+
+          <figure class="screen-item reveal" style="--d:0.08s">
+            <div class="phone phone--sm">
+              <div class="phone-screen">
+                <div class="phone-island"></div>
+                <img class="phone-shot" src="images/assistant.jpg" alt="Assistant EcoBot répondant dans l'application" loading="lazy" decoding="async">
+                <div class="scr scr-ph"><img class="scr-ph-logo" src="logo-green.png" alt="" aria-hidden="true"></div>
+              </div>
+            </div>
+            <figcaption>
+              <strong>Assistant EcoBot</strong>
+              <span>Un compagnon qui connaît sentiers, météo et services</span>
+            </figcaption>
+          </figure>
+
+          <figure class="screen-item reveal" style="--d:0.16s">
+            <div class="phone phone--sm">
+              <div class="phone-screen">
+                <div class="phone-island"></div>
+                <img class="phone-shot" src="images/parametres.jpg" alt="Paramètres : langue, mode sombre et lecture vocale" loading="lazy" decoding="async">
+                <div class="scr scr-dark scr-set">
+                  <div class="scr-dhead scr-dhead--c"><i>‹</i><b>Paramètres</b><i>?</i></div>
+                  <div class="scr-profrow"><span class="scr-profico">👤</span><span><b>Mouhaned Mliki</b><small>Voir profil et progression</small></span><i>›</i></div>
+                  <span class="scr-setlbl">Préférences régionales</span>
+                  <div class="scr-setcard">
+                    <span class="scr-setrow"><i class="scr-si">🌐</i><span><b>Langue</b><small>Choisissez votre langue</small></span><em>Français ›</em></span>
+                    <span class="scr-setrow"><i class="scr-si">🌙</i><span><b>Mode sombre</b><small>Activer le thème sombre</small></span><u class="scr-tg is-on"></u></span>
+                    <span class="scr-setrow"><i class="scr-si">🔊</i><span><b>Lecture vocale</b><small>Lire à voix haute les POI</small></span><u class="scr-tg is-on"></u></span>
+                    <span class="scr-setrow"><i class="scr-si">🗣️</i><span><b>Type de voix</b><small>Voice1</small></span><em>Voice1 ▾</em></span>
+                  </div>
+                  <span class="scr-setlbl">Communications</span>
+                  <div class="scr-setcard">
+                    <span class="scr-setrow"><i class="scr-si">🔔</i><span><b>Alertes de sentier</b><small>Recevoir les alertes danger</small></span><u class="scr-tg"></u></span>
+                    <span class="scr-setrow"><i class="scr-si">📍</i><span><b>Points d'intérêt</b><small>Notifier à l'approche d'un POI</small></span><u class="scr-tg is-on"></u></span>
+                  </div>
+                  <div class="scr-bnav scr-bnav--d">
+                    <span><svg viewBox="0 0 24 24"><use href="#i-home"/></svg>Accueil</span>
+                    <span><svg viewBox="0 0 24 24"><use href="#i-map"/></svg>Carte</span>
+                    <b class="scr-sosbtn">SOS</b>
+                    <span><svg viewBox="0 0 24 24"><use href="#i-hike"/></svg>Sentiers</span>
+                    <span class="is-on"><svg viewBox="0 0 24 24"><use href="#i-gear"/></svg>Réglages</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <figcaption>
+              <strong>Réglages &amp; accessibilité</strong>
+              <span>Trois langues, mode sombre et lecture vocale</span>
+            </figcaption>
+          </figure>
+
+          <figure class="screen-item reveal" style="--d:0.24s">
+            <div class="phone phone--sm">
+              <div class="phone-screen">
+                <div class="phone-island"></div>
+                <img class="phone-shot" src="images/mode-sombre.jpg" alt="Écran d'accueil en mode sombre avec fond de carte satellite" loading="lazy" decoding="async">
+                <div class="scr scr-ph"><img class="scr-ph-logo" src="logo-green.png" alt="" aria-hidden="true"></div>
+              </div>
+            </div>
+            <figcaption>
+              <strong>Mode sombre &amp; satellite</strong>
+              <span>Thème sombre intégral et fond de carte satellite</span>
+            </figcaption>
+          </figure>
+        </div>
+
+        <!-- Pagination du carrousel : visible uniquement en version mobile,
+             où la galerie devient une bande défilante à aimantation. -->
+        <div class="screens-nav" id="screensNav">
+          <div class="screens-dots" id="screensDots" role="tablist" aria-label="Écrans de l'application"></div>
+          <span class="screens-hint">Glissez pour explorer</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════ VIDÉO DE DÉMONSTRATION ══════════════
+         Montage réalisé à partir de la capture d'écran de l'application.
+         Musique : « Amberlight » de Scott Buckley, licence CC BY 4.0.        -->
+    <section class="section video" id="video">
+      <div class="fireflies" aria-hidden="true">
+        <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+      </div>
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="eyebrow eyebrow--light">Démonstration</span>
+          <h2 class="h2--light">EcoGuide <em>en action</em></h2>
+          <p class="p--light">Cinquante secondes filmées dans l'application, du choix du sentier à l'alerte d'urgence.</p>
+        </div>
+
+        <div class="demo reveal">
+          <div class="demo-side">
+            <ol class="chaps" id="chaps">
+            <button class="chap" type="button" data-t="0.0">
+              <span class="chap-t">0:00</span>
+              <span class="chap-x"><strong>Bienvenue</strong><small>L'aventure vous attend en pleine nature</small></span>
+            </button>
+            <button class="chap" type="button" data-t="2.95">
+              <span class="chap-t">0:02</span>
+              <span class="chap-x"><strong>Accueil &amp; carte</strong><small>Carte de Tabarka, accès rapides et météo du jour</small></span>
+            </button>
+            <button class="chap" type="button" data-t="9.1">
+              <span class="chap-t">0:09</span>
+              <span class="chap-x"><strong>Fiche du sentier</strong><small>Photo, distance, durée et dénivelé</small></span>
+            </button>
+            <button class="chap" type="button" data-t="14.25">
+              <span class="chap-t">0:14</span>
+              <span class="chap-x"><strong>Tracé &amp; altitude</strong><small>Carte du parcours, profil d'altitude et points d'intérêt</small></span>
+            </button>
+            <button class="chap" type="button" data-t="17.4">
+              <span class="chap-t">0:17</span>
+              <span class="chap-x"><strong>Ouverture par QR</strong><small>Le sentier protégé se déverrouille avec le code du guide</small></span>
+            </button>
+            <button class="chap" type="button" data-t="24.85">
+              <span class="chap-t">0:24</span>
+              <span class="chap-x"><strong>Guidage temps réel</strong><small>Instructions pas à pas, distance et vitesse en direct</small></span>
+            </button>
+            <button class="chap" type="button" data-t="31.5">
+              <span class="chap-t">0:31</span>
+              <span class="chap-x"><strong>Alerte SOS</strong><small>Position, altitude et contacts de secours</small></span>
+            </button>
+            <button class="chap" type="button" data-t="34.55">
+              <span class="chap-t">0:34</span>
+              <span class="chap-x"><strong>Patrimoine naturel</strong><small>Les points d'intérêt racontés sur le terrain</small></span>
+            </button>
+            <button class="chap" type="button" data-t="38.2">
+              <span class="chap-t">0:38</span>
+              <span class="chap-x"><strong>Trois langues</strong><small>Français, English et العربية en un geste</small></span>
+            </button>
+            <button class="chap" type="button" data-t="45.35">
+              <span class="chap-t">0:45</span>
+              <span class="chap-x"><strong>Mode sombre</strong><small>Bascule instantanée du thème</small></span>
+            </button>
+            <button class="chap" type="button" data-t="48.2">
+              <span class="chap-t">0:48</span>
+              <span class="chap-x"><strong>Profil &amp; progression</strong><small>Statistiques, badges et historique</small></span>
+            </button>
+            </ol>
+          </div>
+
+          <div class="demo-phone">
+            <div class="phone phone--demo">
+              <div class="phone-screen">
+                <video id="demoVideo" class="demo-video" playsinline preload="none"
+                       poster="video/ecoguide-demo.jpg"
+                       aria-label="Démonstration de l'application EcoGuide">
+                  <source src="video/ecoguide-demo.mp4" type="video/mp4">
+                  Votre navigateur ne peut pas lire cette vidéo.
+                </video>
+
+                <div class="demo-overlay" id="demoOverlay">
+                  <button class="demo-play" id="demoPlay" type="button" aria-label="Activer le son">
+                    <span class="video-ring" aria-hidden="true"></span>
+                    <span class="video-ring video-ring--2" aria-hidden="true"></span>
+                    <svg id="demoPlayIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4V5Z"/><path d="M16 9a4 4 0 0 1 0 6"/><path d="M19 6a8 8 0 0 1 0 12"/></svg>
+                  </button>
+                  <span class="demo-hint" id="demoHint">Activer le son</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="demo-bar">
+              <button class="demo-btn" id="demoToggle" type="button" aria-label="Lecture ou pause">
+                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l11-6.5-11-6.5Z"/></svg>
+              </button>
+              <div class="demo-track" id="demoTrack" role="presentation">
+                <span class="demo-fill" id="demoFill"></span>
+              </div>
+              <span class="demo-time" id="demoTime">0:00</span>
+              <button class="demo-btn" id="demoSound" type="button" aria-label="Couper ou rétablir le son" aria-pressed="false">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4V5Z"/><path d="M16 9a4 4 0 0 1 0 6"/><path d="M19 6a8 8 0 0 1 0 12"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════ PARCOURS ══════════════ -->
+    <section class="section journey" id="parcours">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="eyebrow">Comment ça marche</span>
+          <h2>Votre aventure, <em>pas à pas</em></h2>
+          <p>Suivez le sentier — de la préparation au sommet, EcoGuide vous accompagne à chaque étape.</p>
+        </div>
+
+        <div class="journey-track" id="journeyTrack">
+          <svg class="journey-svg" viewBox="0 0 200 1000" preserveAspectRatio="none" aria-hidden="true">
+            <path class="journey-base" d="M100 0 C40 40 40 85 100 125 C170 180 170 320 100 375 C30 430 30 570 100 625 C170 680 170 820 100 875 C60 920 60 960 100 1000"/>
+            <path class="journey-path" id="journeyPath" d="M100 0 C40 40 40 85 100 125 C170 180 170 320 100 375 C30 430 30 570 100 625 C170 680 170 820 100 875 C60 920 60 960 100 1000"/>
+          </svg>
+
+          <div class="journey-step" data-step="0">
+            <div class="journey-card reveal">
+              <span class="journey-emoji">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="14" cy="4" r="2"/><path d="m11 21 1-6-3-3 1-5 3 3 3 1M9 12l-2 9M17 8l1 13"/></svg>
+              </span>
+              <h3>Choisissez votre sentier</h3>
+              <p>Filtrez par difficulté, distance et durée. Chaque fiche donne le profil d'altitude, la carte du tracé, les points d'intérêt et les avis de la communauté.</p>
+            </div>
+            <span class="journey-marker"><i>1</i></span>
+            <span class="journey-spacer"></span>
+          </div>
+
+          <div class="journey-step journey-step--alt" data-step="1">
+            <span class="journey-spacer"></span>
+            <span class="journey-marker"><i>2</i></span>
+            <div class="journey-card reveal">
+              <span class="journey-emoji">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v11m0 0 4.5-4.5M12 14l-4.5-4.5"/><path d="M4 16v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/></svg>
+              </span>
+              <h3>Téléchargez la carte</h3>
+              <p>Choisissez votre niveau de détail — d'Eco à Max — et embarquez cartographie, sentiers et POI. Plus besoin de réseau une fois en forêt.</p>
+            </div>
+          </div>
+
+          <div class="journey-step" data-step="2">
+            <div class="journey-card reveal">
+              <span class="journey-emoji">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.2"/><rect x="14" y="3" width="7" height="7" rx="1.2"/><rect x="3" y="14" width="7" height="7" rx="1.2"/><path d="M14 14h3v3h-3zM20 14v3M14 20h3M20 20h1"/></svg>
+              </span>
+              <h3>Scannez, si le sentier l'exige</h3>
+              <p>Les itinéraires sensibles sont verrouillés&nbsp;: un QR code remis par votre guide agréé les déverrouille. Un accès encadré qui protège les zones fragiles.</p>
+            </div>
+            <span class="journey-marker"><i>3</i></span>
+            <span class="journey-spacer"></span>
+          </div>
+
+          <div class="journey-step journey-step--alt" data-step="3">
+            <span class="journey-spacer"></span>
+            <span class="journey-marker"><i>4</i></span>
+            <div class="journey-card reveal">
+              <span class="journey-emoji">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5.2-5.2 2 2-5.2 5.2-2Z"/></svg>
+              </span>
+              <h3>Randonnez l'esprit léger</h3>
+              <p>Guidage temps réel, points d'intérêt racontés à voix haute, alertes de sentier — et le bouton SOS toujours accessible en bas de l'écran.</p>
+            </div>
+          </div>
+
+          <div class="journey-step" data-step="4">
+            <div class="journey-card reveal">
+              <span class="journey-emoji">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="9" r="6"/><path d="m8.2 14.3-1.4 6.4 5.2-3 5.2 3-1.4-6.4"/></svg>
+              </span>
+              <h3>Apprenez &amp; progressez</h3>
+              <p>Quiz Flore et Faune, score total, taux de réussite et historique. Chaque sortie vous rapproche du randonneur éco-expert.</p>
+            </div>
+            <span class="journey-marker"><i>5</i></span>
+            <span class="journey-spacer"></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════ STATS ══════════════ -->
+    <section class="stats" id="stats">
+      <div class="fireflies" aria-hidden="true">
+        <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+      </div>
+      <div class="container">
+        <div class="stats-grid">
+          <div class="stat reveal">
+            <strong><span class="counter" data-target="3">0</span></strong>
+            <span>langues : FR · AR · EN</span>
+          </div>
+          <div class="stat reveal" style="--d:.08s">
+            <strong><span class="counter" data-target="100">0</span><em>%</em></strong>
+            <span>utilisable hors ligne</span>
+          </div>
+          <div class="stat reveal" style="--d:.16s">
+            <strong><span class="counter" data-target="4">0</span></strong>
+            <span>modules : sentiers, cartes, quiz, annuaire</span>
+          </div>
+          <div class="stat reveal" style="--d:.24s">
+            <strong><span class="counter" data-target="24">0</span><em>/24</em></strong>
+            <span>alerte SOS géolocalisée</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════ ENGAGEMENT ══════════════ -->
+    <section class="section eco" id="engagement">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="eyebrow">Notre engagement</span>
+          <h2>La technologie au service <em>du vivant</em></h2>
+          <p>EcoGuide n'est pas qu'un GPS&nbsp;: c'est un outil d'écotourisme solidaire, pensé pour préserver les forêts et le littoral du Nord-Ouest tunisien et faire vivre ses habitants face aux changements climatiques.</p>
+        </div>
+        <div class="eco-grid">
+          <article class="eco-card reveal" style="--d:.0s">
+            <span class="eco-num">01</span>
+            <h3>Sensibiliser</h3>
+            <p>Des contenus éducatifs sur la faune, la flore et le patrimoine — du Cerf de Barbarie aux forêts de Chêne Zéen — directement sur le sentier.</p>
+          </article>
+          <article class="eco-card reveal" style="--d:.1s">
+            <span class="eco-num">02</span>
+            <h3>Protéger</h3>
+            <p>Des tracés balisés qui limitent le piétinement, et un verrouillage par QR code qui réserve les zones les plus fragiles aux sorties encadrées.</p>
+          </article>
+          <article class="eco-card reveal" style="--d:.2s">
+            <span class="eco-num">03</span>
+            <h3>Soutenir</h3>
+            <p>Un annuaire qui met en lumière les artisans, produits et guides de la SMSA — pour que le tourisme profite d'abord au territoire.</p>
+          </article>
+        </div>
+        <blockquote class="eco-quote reveal">
+          «&nbsp;Un écotourisme solidaire, adapté aux changements climatiques.&nbsp;»
+          <cite>— La promesse EcoGuide</cite>
+        </blockquote>
+      </div>
+    </section>
+
+    <!-- ══════════════ TÉLÉCHARGEMENT ══════════════ -->
+    <section class="section download" id="telecharger">
+      <div class="container">
+        <div class="download-card reveal">
+          <div class="download-topo" aria-hidden="true"></div>
+          <div class="download-copy">
+            <span class="eyebrow eyebrow--light">Téléchargement</span>
+            <h2>Prêt à prendre <em>de la hauteur&nbsp;?</em></h2>
+            <p>Installez EcoGuide gratuitement et partez explorer les sentiers du Nord-Ouest tunisien — même sans réseau.</p>
+            <!-- L'APK est servi par le site lui-même : le couple
+                 « même origine + download » garantit un enregistrement
+                 immédiat. Hébergé sur Drive, c'était le navigateur (voire
+                 l'application Drive sur Android) qui décidait d'ouvrir une
+                 page intermédiaire — impossible à contourner depuis ici,
+                 Drive refusant l'iframe comme la requête CORS. -->
+            <a class="apk-btn" id="apkBtn" data-apk
+               href="Ecoguide.apk"
+               download="Ecoguide.apk"
+               type="application/vnd.android.package-archive">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12m0 0 5-5m-5 5-5-5M4 21h16"/></svg>
+              <span><strong data-apk-label>Télécharger l'APK</strong><small>Android · 76 Mo</small></span>
+            </a>
+
+            <div class="store-buttons">
+              <span class="store-btn store-btn--soon" aria-label="App Store : bientôt disponible">
+                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.05 12.54c-.03-2.53 2.07-3.74 2.16-3.8-1.18-1.72-3.01-1.96-3.66-1.99-1.56-.16-3.04.92-3.83.92-.79 0-2.01-.9-3.3-.87-1.7.03-3.27.99-4.14 2.5-1.77 3.07-.45 7.61 1.27 10.1.84 1.22 1.84 2.59 3.16 2.54 1.27-.05 1.75-.82 3.28-.82 1.53 0 1.96.82 3.3.79 1.36-.02 2.22-1.24 3.05-2.46.96-1.41 1.36-2.78 1.38-2.85-.03-.01-2.64-1.01-2.67-4.06zM14.53 4.9c.7-.85 1.17-2.03 1.04-3.2-1.01.04-2.23.67-2.95 1.52-.65.75-1.22 1.95-1.06 3.1 1.12.09 2.27-.57 2.97-1.42z"/></svg>
+                <span><small>Bientôt sur</small><strong>App Store</strong></span>
+              </span>
+              <span class="store-btn store-btn--soon" aria-label="Google Play : bientôt disponible">
+                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3.6 1.8c-.35.37-.55.94-.55 1.68v17.07c0 .74.2 1.31.56 1.67l.09.08 9.56-9.56v-.22L3.7 1.72l-.1.08zm12.86 12.15-3.19-3.19v-.22l3.19-3.19.07.04 3.78 2.15c1.08.61 1.08 1.61 0 2.23l-3.78 2.14-.07.04zm-.07.05-3.26-3.26-9.53 9.53c.36.38.94.42 1.6.05l11.19-6.32zM3.6 1.72l9.53 9.53 3.26-3.26L5.2 1.67c-.66-.37-1.25-.32-1.6.05z"/></svg>
+                <span><small>Bientôt sur</small><strong>Google Play</strong></span>
+              </span>
+            </div>
+
+            <p class="apk-note">
+              Android demandera d'autoriser l'installation depuis une source inconnue&nbsp;:
+              ouvrez le fichier téléchargé, puis confirmez.
+            </p>
+
+            <div class="download-meta">
+              <span>★ 4,8 / 5</span>
+              <span class="dot-sep" aria-hidden="true"></span>
+              <span>Gratuit</span>
+              <span class="dot-sep" aria-hidden="true"></span>
+              <span>FR · EN · العربية</span>
+            </div>
+          </div>
+          <div class="download-phone" aria-hidden="true">
+            <div class="phone phone--sm phone-tilt">
+              <div class="phone-screen">
+                <div class="phone-island"></div>
+                <div class="scr scr-mapfull scr-mapfull--dl">
+                  <svg viewBox="0 0 260 420" preserveAspectRatio="none">
+                    <path d="M-10 90 Q60 50 130 95 T280 80" fill="none" stroke="rgba(255,255,255,.12)" stroke-width="1.5"/>
+                    <path d="M-10 170 Q70 125 140 175 T280 160" fill="none" stroke="rgba(255,255,255,.1)" stroke-width="1.5"/>
+                    <path d="M-10 250 Q80 205 150 255 T280 240" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="1.5"/>
+                    <path d="M-10 330 Q80 290 150 335 T280 320" fill="none" stroke="rgba(255,255,255,.07)" stroke-width="1.5"/>
+                    <path d="M35 385 Q85 320 125 330 T205 240 T235 130 T250 55" fill="none" stroke="#34d399" stroke-width="4" stroke-linecap="round" stroke-dasharray="8 9"/>
+                    <circle cx="35" cy="385" r="6" fill="#34d399"/>
+                    <circle cx="250" cy="55" r="6" fill="#d9a441"/>
+                  </svg>
+                  <span class="scr-chip scr-chip--top"><i class="chip-pulse"></i> Prêt pour l'aventure</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ══════════════ FOOTER ══════════════ -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="#accueil" class="nav-logo nav-logo--footer">
+            <span class="nav-logo-mark">
+              <img class="lotus-badge" src="logo-moss.png" alt="" aria-hidden="true">
+            </span>
+            <span class="nav-logo-text">Eco<em>Guide</em></span>
+          </a>
+          <p>L'application officielle des sentiers du Nord-Ouest tunisien&nbsp;: GPS hors ligne, sécurité d'urgence, patrimoine naturel et économie locale solidaire. Un projet d'écotourisme adapté aux changements climatiques.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Application</h4>
+          <a href="#fonctionnalites">Fonctionnalités</a>
+          <a href="#apercu">L'application</a>
+          <a href="#video">Démonstration</a>
+          <a href="#telecharger">Télécharger</a>
+        </div>
+        <div class="footer-col">
+          <h4>Le projet</h4>
+          <a href="#engagement">Écotourisme solidaire</a>
+          <a href="#">Sentiers &amp; biodiversité</a>
+          <a href="#">La SMSA</a>
+        </div>
+        <div class="footer-col footer-col--contact">
+          <h4>Coordonnées SMSA</h4>
+          <span class="footer-line">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s7-5.5 7-11a7 7 0 1 0-14 0c0 5.5 7 11 7 11Z"/><circle cx="12" cy="10" r="2.6"/></svg>
+            Elbhira Nefza Beja, Béja, Tunisie&nbsp;9010
+          </span>
+          <a href="mailto:tresors.montblanc1@gmail.com">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+            tresors.montblanc1@gmail.com
+          </a>
+          <span class="footer-line">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 21V9l9-6 9 6v12"/><path d="M9 21v-6h6v6"/></svg>
+            SMSA Trésors Mont Blanc Nefza
+          </span>
+        </div>
+      </div>
+
+      <!-- Retour en haut : sur mobile la page est longue, ce raccourci
+           évite un défilement interminable au pouce. -->
+      <a class="footer-top" href="#accueil">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20V5m0 0-6 6m6-6 6 6"/></svg>
+        Haut de page
+      </a>
+
+      <div class="footer-bottom">
+        <span>© 2026 EcoGuide · Sentiers du Nord-Ouest tunisien.</span>
+        <span>Une application développée par <a class="footer-rz" href="https://rzprod.tn" target="_blank" rel="noopener noreferrer"><strong>RZ PROD</strong></a> pour la SMSA.</span>
+      </div>
+
+      <!-- Mention exigée par la licence CC BY 4.0 de la musique de démonstration.
+           À conserver tant que la bande-son actuelle est utilisée. -->
+      <p class="footer-credit">
+        Musique de la démonstration&nbsp;:
+        <a href="https://www.scottbuckley.com.au/" target="_blank" rel="noopener noreferrer">«&nbsp;Amberlight&nbsp;» de Scott Buckley</a>,
+        sous licence <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">CC&nbsp;BY&nbsp;4.0</a>.
+      </p>
+    </div>
+  </footer>
+
+  <!-- Barre d'action fixe (mobile) : le téléchargement toujours à portée de pouce.
+       Elle apparaît après le hero et s'efface sur la section Téléchargement. -->
+  <div class="mcta" id="mcta">
+    <a class="mcta-btn" href="#telecharger">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12m0 0 5-5m-5 5-5-5M4 21h16"/></svg>
+      <span><strong>Installer EcoGuide</strong><small>Gratuit · Android · 76 Mo</small></span>
+    </a>
+  </div>
+
+  <script src="script.js?v=2" defer></script>
+</body>
+</html>

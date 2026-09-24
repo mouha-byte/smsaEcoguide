@@ -1,0 +1,73 @@
+VIDÉO DE DÉMONSTRATION ECOGUIDE
+===============================
+
+  ecoguide-demo.mp4   Le montage affiché sur le site (51,7 s · 3,6 Mo)
+  ecoguide-demo.jpg   L'affiche montrée avant la lecture
+
+
+D'OÙ VIENT CE MONTAGE
+---------------------
+Il est tiré de votre capture d'écran d'origine (2 min 08), conservée
+intacte dans images/originaux/.
+
+Aucune retouche de couleur, aucun filtre : c'est votre application
+telle quelle. Seules des coupes et des fondus enchaînés de 0,35 s
+ont été appliqués.
+
+
+LES 11 SÉQUENCES RETENUES (repères dans le montage)
+---------------------------------------------------
+  0:00  Bienvenue              écran de marque
+  0:02  Accueil & carte        carte de Tabarka, accès rapides, météo
+  0:09  Fiche du sentier       photo, distance, durée, dénivelé
+  0:14  Tracé & altitude       carte du parcours, profil, POI
+  0:17  Ouverture par QR       verrouillé -> déverrouillé
+  0:24  Guidage temps réel     « tournez à gauche », stats en direct
+  0:31  Alerte SOS             position, altitude, contacts
+  0:34  Patrimoine naturel     POI « La Brune d'Atlas »
+  0:38  Trois langues          anglais -> arabe
+  0:45  Mode sombre            bascule du thème en direct
+  0:48  Profil & progression   badges, historique, activité
+
+
+CE QUI A ÉTÉ ÉCARTÉ, ET POURQUOI
+--------------------------------
+  0:04-0:11  écran noir puis choix du compte Google.
+             Cette séquence affichait trois adresses e-mail réelles.
+             Elle a été retirée : ces adresses n'ont pas à figurer
+             sur un site public.
+
+  0:40-0:58  déplacements sur la carte, sans action nouvelle.
+  1:20-1:35  écrans déjà montrés plus tôt.
+  1:40-1:50  recherche à vide et chargements.
+  2:05-2:08  retour à l'accueil, redondant.
+
+
+MUSIQUE
+-------
+  « Amberlight » de Scott Buckley — licence CC BY 4.0
+  https://www.scottbuckley.com.au/
+
+Extrait de 2:08 à 3:00, fondu d'entrée 1,8 s et de sortie 3,5 s,
+niveau normalisé à -18 LUFS.
+
+La licence CC BY 4.0 autorise l'usage commercial À CONDITION de
+citer l'auteur. La mention figure sous les chapitres, dans la
+section vidéo du site : ne la supprimez pas.
+
+Pour changer de musique, remplacez le fichier et refaites le mixage.
+Le montage sans son est reproductible à partir des mêmes coupes.
+
+
+LIMITE CONNUE : LA DÉFINITION
+-----------------------------
+La capture d'origine fait 384 x 864 pixels : WhatsApp l'a fortement
+compressée au passage. C'est peu pour une vidéo web.
+
+Sur le site, elle est affichée dans un cadre de téléphone d'environ
+300 px de large, donc légèrement réduite : à cette taille, elle est
+nette. Elle deviendrait floue en plein écran.
+
+Si vous récupérez l'enregistrement d'origine depuis le téléphone
+(sans passer par WhatsApp), il sera bien plus défini. Donnez-le-moi
+et je referai le montage à l'identique, en meilleure qualité.

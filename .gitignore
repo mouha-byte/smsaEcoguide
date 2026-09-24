@@ -1,0 +1,15 @@
+# Liaison locale au projet Vercel (recréée par « vercel link »)
+.vercel
+
+# macOS
+.DS_Store
+
+# Réglages locaux de l'agent
+.claude/settings.local.json
+
+# Rush de tournage : 19 Mo, non utilisé par le site.
+# Git conserve tout fichier committé à jamais dans son historique,
+# même supprimé ensuite — mieux vaut ne jamais l'y mettre.
+images/originaux/*.mp4
+
+.vercel

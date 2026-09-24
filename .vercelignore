@@ -1,0 +1,9 @@
+# Fichiers non utilisés par le site — exclus du déploiement
+# (logo-mark.png en a été retiré : c'est désormais le lotus de la
+#  barre de navigation, il doit partir en ligne.)
+images/originaux
+images/LISEZ-MOI.txt
+video/LISEZ-MOI.txt
+logo.png
+logo.svg
+.claude

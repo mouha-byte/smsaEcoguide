@@ -1,0 +1,54 @@
+CAPTURES D'ÉCRAN DE L'APPLICATION ECOGUIDE
+==========================================
+
+Ce dossier contient les vraies captures utilisées par le site.
+
+
+LES 13 CAPTURES UTILISÉES
+-------------------------
+  accueil.jpg              Accueil : carte de Tabarka, actions rapides,
+                           sentiers à proximité   -> utilisée dans le HERO
+  sentiers.jpg             « Trouvez votre sentier » : recherche + filtres
+  sentier-detail.jpg       Fiche sentier9 : photo, MODÉRÉ, distance, dénivelé
+  sentier-verrouille.jpg   Modale « Sentier verrouillé » (ERR-TRAIL-403)
+  sos.jpg                  Urgence SOS : bouton rouge, message, position
+  poi-cerf.jpg             Point d'intérêt « Le Cerf de Barbarie »
+  patrimoine.jpg           Patrimoine local : liste des POI
+  quiz.jpg                 Quiz : score total, catégories Flore / Faune
+  cartes-hors-ligne.jpg    Cartes hors ligne : Eco / Standard / Détaillé / Max
+  annuaire.jpg             Annuaire Local : établissements éco-responsables
+  assistant.jpg            Assistant EcoBot
+  mode-sombre.jpg          Accueil en mode sombre + fond satellite
+  parametres.jpg           Paramètres : langue, thème, lecture vocale
+
+
+DOSSIER originaux/
+------------------
+Vos 31 captures d'origine, intactes, sous leur nom WhatsApp.
+Le site ne les charge pas : elles sont là pour archive.
+
+Si vous voulez remplacer une image du site par une autre de ce dossier,
+copiez-la simplement par-dessus en gardant le nom de destination. Ex. :
+
+    cp "originaux/WhatsApp Image ... (3).jpeg" quiz.jpg
+
+
+COMMENT LE SITE LES AFFICHE
+---------------------------
+Chaque téléphone du site contient la capture ET, dessous, une maquette
+dessinée en CSS.
+
+  - Fichier présent  -> la vraie capture s'affiche.
+  - Fichier absent   -> la maquette CSS prend le relais.
+                        Aucune image cassée n'apparaît jamais.
+
+La barre système Android du bas (☰ ○ ◁) est rognée automatiquement par
+le cadre du téléphone. La barre d'état du haut (heure, réseau, batterie)
+reste visible : c'est voulu, ça rend le rendu plus réaliste.
+
+
+POIDS
+-----
+Les 13 captures pèsent environ 1,1 Mo au total, ce qui est correct.
+Seule celle du hero se charge immédiatement ; les 12 autres sont en
+chargement différé (loading="lazy"), donc la page reste rapide.
